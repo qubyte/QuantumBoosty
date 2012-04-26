@@ -9,6 +9,15 @@
  *  This is particularly useful behaviour for defining generic
  *  Schrödinger and master equations which are handed a Hamiltonian
  *  and perhaps a dissipator.
+ *  
+ *  Mark S Everitt - 26/April/2012
+ *  mark.s.everitt@gmail.com
+ *  This  file is licensed under the Creative Commons Attribution
+ *  Non-Commercial Schare Alike license (cc by-nc-nd)
+ *  http://creativecommons.org/licenses/by-nc-sa/3.0/
+ *  As such, I require derivative works to include my name and email
+ *  address. This file or any derivative thereof may not be used for
+ *  commercial purposes without my explicit written permission.
  */
 #include <iostream>
 #include <complex>
