@@ -19,35 +19,41 @@ It may surprise you to learn (it surprised me) that the brackets of a function c
 
 In the case of the code two_level.cpp, I've used a simple Hamiltonian representing a driven two level system. The Hamiltonian is instantiated with the level splitting, the frequency of the drive, and the amplitude of the drive:
 
-    hamiltonian H(Omega,nu,Amp);
+```c++
+hamiltonian H(Omega,nu,Amp);
+```
 
 Now we can use this instance to give us the Hamiltonian at any time:
-    
-    matrix_type Ht = H(t);
-    
+
+```c++    
+matrix_type Ht = H(t);
+```
+
 Looking closer at the functor:
-    
-    template <class optype> 
-    class hamiltonian
+
+```c++
+template <class optype> 
+class hamiltonian
+{
+private:
+    const double Omega, nu, Amp;
+    optype H0;
+
+public:
+    hamiltonian (double _Omega, double _nu, double _Amp) : Omega(_Omega), nu(_nu), Amp(Amp)
     {
-    private:
-        const double Omega, nu, Amp;
-        optype H0;
-    
-    public:
-        hamiltonian (double _Omega, double _nu, double _Amp) : Omega(_Omega), nu(_nu), Amp(Amp)
-        {
-            H0 = Omega*sigma_z*0.5;
-        };
-        
-        optype operator() (double t) const
-        {
-            optype H(2,2);
-            
-            H = H0 + Amp*cos(nu*t)*sigma_x*0.5;
-            return H;
-        }
+        H0 = Omega*sigma_z*0.5;
     };
+    
+    optype operator() (double t) const
+    {
+        optype H(2,2);
+        
+        H = H0 + Amp*cos(nu*t)*sigma_x*0.5;
+        return H;
+    }
+};
+```
 
 Hopefully much of this is understandable. A C++ class is like a C structure, but it can have internal functions called _member functions_ or _methods_. The addition of these functions means that it makes sense for the class to keep some information (think book keeping) to itself, so both member functions and data can be declared as public (anyone can take a look) or private (for the class only). This is massively over simplifying, but either you know this or you can wiki it.
 
