@@ -8,7 +8,7 @@ One of the largest problems I came up against when working with C or Fortran was
 Recently I came across the C++ [odeint](www.odeint.com) library. I was so impressed by its flexibility that I actually started using C++ (having had no prior experience) just for the convenience of it. I'm glad that I did this, because C++ has some other very useful features that make solving quantum mechanical systems simpler. Probably the most important feature that I use (perhaps abuse) is functors, a kind class with which instances can be used as functions.
 
 ## To compile
-First, make sure you have boost installed.
+First, make sure you have boost and odeint installed.
 
 Using gcc, I get good results with version 4.6+ using:
 
