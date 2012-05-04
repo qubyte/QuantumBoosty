@@ -1,5 +1,4 @@
 # QuantumBoosty
-
 A few files to demonstrate some useful C++ features for integrating Schrödinger and master equations. These files use ublas (from [Boost](www.boost.org)) and the [odeint](www.odeint.com) library, which is currently in the Boost sandbox. Users may also find the [expm.hpp](https://www.dbtsai.com/blog/2008-11-25-matrix-exponential/) implementation of the general matrix exponential helpful for time independent systems.
 
 ## Background
@@ -8,8 +7,16 @@ One of the largest problems I came up against when working with C or Fortran was
 
 Recently I came across the C++ [odeint](www.odeint.com) library. I was so impressed by its flexibility that I actually started using C++ (having had no prior experience) just for the convenience of it. I'm glad that I did this, because C++ has some other very useful features that make solving quantum mechanical systems simpler. Probably the most important feature that I use (perhaps abuse) is functors, a kind class with which instances can be used as functions.
 
-## Some explanation
+## To compile
+First, make sure you have boost installed.
 
+Using gcc, I get good results with version 4.6+ using:
+
+    gcc -Ofast -fwhole-program -I/path/to/boost two_level.xpp -o two_level
+
+If you're using an earlier version of gcc, replace `-Ofast` with `-O3 -ffast-math`.
+
+## Some explanation
 The code may be unfamiliar to a C coder in places. In this section I attempt to explain some of the features that C++ allows.
 
 ### Functors
