@@ -40,14 +40,14 @@ typedef boost::numeric::ublas::vector< complex<double> > state_type;
 typedef boost::numeric::odeint::controlled_runge_kutta< runge_kutta_cash_karp54<state_type> > stepper_type;
 
 // Function prototypes.
-matrix_type Kronecker(const matrix_type &A, const matrix_type &B);
-state_type Diag(const matrix_type &A);
-matrix_type LeftOp(const matrix_type &A);
-matrix_type RightOp(const matrix_type &A);
-matrix_type Commutator(matrix_type &A);
-matrix_type Dissipator(const double gamma, const matrix_type &L);
-state_type Vec(const matrix_type &A);
-void initialise_operators(void);
+matrix_type Kronecker            (const matrix_type &A, const matrix_type &B);
+state_type  Diag                 (const matrix_type &A);
+matrix_type LeftOp               (const matrix_type &A);
+matrix_type RightOp              (const matrix_type &A);
+matrix_type Commutator           (const matrix_type &A);
+matrix_type Dissipator           (const double gamma, const matrix_type &L);
+state_type  Vec                  (const matrix_type &A);
+void        initialise_operators (void);
 
 // Memory for subsystem and system matrices.
 matrix_type sigma_x(2,2,0), sigma_y(2,2,0), sigma_z(2,2,0), sigma_p(2,2,0), sigma_m(2,2,0);
@@ -269,7 +269,7 @@ matrix_type RightOp(const matrix_type &A)
 }
 
 // Commutator to superoperator.
-matrix_type Commutator(matrix_type &A)
+matrix_type Commutator(const matrix_type &A)
 {
     return LeftOp(A) - RightOp(A);
 }
