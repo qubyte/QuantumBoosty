@@ -185,14 +185,14 @@ int main(int argc, char **argv)
     // Uncomment the block function call below to try out pure evolution.
     /*
     integrate_const(
-    stepper_type(default_error_checker<double>(1e-9, 1e-9)),
-    schrodinger<matrix_type,state_type>(H),
-    psiv,
-    0.0,
-    tend,
-    abs(tend/2000.0),
-    vector_observer(cout)
-    );
+                    stepper_type(default_error_checker<double>(1e-9, 1e-9)),
+                    schrodinger<matrix_type,state_type>(H),
+                    psiv,
+                    0.0,
+                    tend,
+                    abs(tend/2000.0),
+                    vector_observer(cout)
+                 　);
     */
     
     // The following should be uncommented for dissipative evolution.
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
                     tend,                                                    // Stop time.
                     abs(tend/500.0),                                         // Step time.
                     matrix_observer(cout)                                    // Output at each step.
-                    );
+                　 );
     time(&end);
     
     return 0;
