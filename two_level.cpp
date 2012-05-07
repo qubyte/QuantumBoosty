@@ -206,7 +206,7 @@ int main(int argc, char **argv)
                     tend,                                                    // Stop time.
                     abs(tend/500.0),                                         // Step time.
                     matrix_observer(cout)                                    // Output at each step.
-                　 );
+                   );
     time(&end);
     
     return 0;
