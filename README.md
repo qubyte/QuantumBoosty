@@ -47,7 +47,7 @@ private:
     optype H0;
 
 public:
-    hamiltonian (double _Omega, double _nu, double _Amp) : Omega(_Omega), nu(_nu), Amp(Amp)
+    hamiltonian (double arg_Omega, double arg_nu, double arg_Amp) : Omega(arg_Omega), nu(arg_nu), Amp(arg_Amp)
     {
         H0 = Omega*sigma_z*0.5;
     };
