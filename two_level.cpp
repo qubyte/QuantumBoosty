@@ -249,7 +249,7 @@ state_type Vec(const matrix_type &A)
     
     for (int n = 0; n < A.size1(); n++) {
         for (int m = 0; m < A.size2(); m++) {
-            vectorized(n*A.size1()+m) = A(n,m);
+            vectorized(n*A.size1()+m) = A(m,n);
         }
     }
     
