@@ -8,5 +8,7 @@ before_install:
   - git clone --depth 1 git://github.com/headmyshoulder/odeint-v2.git
   - sudo cp -r odeint-v2/boost/numeric/odeint/ /usr/include/boost/numeric/odeint
   - sudo cp -r odeint-v2/boost/numeric/odeint.hpp /usr/include/boost/numeric/odeint.hpp
+  - git clone --depth 1 git://github.com/qubyte/QuantumBoosty.git
+  - cd QuantumBoosty
 script:
   - clang -Ofast -fwhole-program -Iboost/boost-trunk/boost two-level.cpp -o two-level
