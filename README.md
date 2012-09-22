@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/[qubyte]/[QuantumBoosty].png)](http://travis-ci.org/[qubyte]/[QuantumBoosty])
+
 # QuantumBoosty
 A few files to demonstrate some useful C++ features for integrating Schrödinger and master equations. These files use ublas (from [Boost](www.boost.org)) and the [odeint](www.odeint.com) library, which is currently in the Boost sandbox. Users may also find the [expm.hpp](https://www.dbtsai.com/blog/2008-11-25-matrix-exponential/) implementation of the general matrix exponential helpful for time independent systems.
 
