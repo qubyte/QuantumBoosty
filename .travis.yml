@@ -2,6 +2,7 @@ language:
   - cpp
 compiler:
   - g++
+  - clang++
 before_install:
   - sudo apt-get install libboost-dev
   - git clone --depth 1 git://github.com/headmyshoulder/odeint-v2.git
@@ -10,5 +11,5 @@ before_install:
   - git clone --depth 1 git://github.com/qubyte/QuantumBoosty.git
   - cd QuantumBoosty
 script:
-  - g++ -Ofast -fwhole-program two_level.cpp -o two_level
+  - $CXX two_level.cpp -o two_level
   - ./two_level
