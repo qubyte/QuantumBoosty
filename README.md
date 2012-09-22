@@ -12,7 +12,7 @@ First, make sure you have boost and odeint installed.
 
 Using gcc, I get good results with version 4.6+ using:
 
-    gcc -Ofast -fwhole-program -I/path/to/boost two_level.xpp -o two_level
+    gcc -Ofast -fwhole-program -I/path/to/boost two_level.cpp -o two_level
 
 If you're using an earlier version of gcc, replace `-Ofast` with `-O3 -ffast-math`.
 
