@@ -6,7 +6,8 @@ compiler:
 before_install:
   - sudo apt-get install libboost-dev
   - git clone --depth 1 git://github.com/headmyshoulder/odeint-v2.git
-  - sudo cp -r odeint-v2/boost/numeric/odeint* /usr/include/boost/numeric/
+  - sudo cp -r odeint-v2/boost/numeric/odeint/ /usr/include/boost/numeric/odeint
+  - sudo cp -r odeint-v2/boost/numeric/odeint.hpp /usr/include/boost/numeric/odeint.hpp
   - git clone --depth 1 git://github.com/qubyte/QuantumBoosty.git
   - cd QuantumBoosty
 script:
