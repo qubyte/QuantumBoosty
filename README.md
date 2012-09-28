@@ -78,6 +78,7 @@ The code in two_level.cpp goes a step further. If it's used to integrate a maste
 
 ![Leo](http://i3.kym-cdn.com/photos/images/original/000/070/279/leostrutoriginal.jpg)
 
+
 ### Superoperators
 A master equation on paper is a matrix valued differential equation. In computational terms, this is a real pain to deal with. On the face of it, it seems like even the time independent terms need to be formulated as functions. A trick can be used to avoid this, with the cost of increasing the size of your system. By vectorising the density matrix (stack the columns, with the left-most on top) all operators, whether they are on the left, right or both sides of the density matrix. There's a very handy page on wikipedia on [vectorisation](http://en.wikipedia.org/wiki/Vectorization_\(mathematics\)) which shows how $n\times n$ operator matrices can be turned into $n^2\times n^2$ superoperator matrices always acting on the left.
 
