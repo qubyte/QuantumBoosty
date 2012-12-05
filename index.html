@@ -1,0 +1,146 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Quantumboosty</title>
+  <meta name="description" content="A few files to demonstrate some useful C++ features for integrating Schrödinger and master equations. These files use ublas (from Boost) and the odeint library, which is currently in the Boost sandbox.">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Quantumboosty</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">A few files to demonstrate some useful C++ features for integrating Schrödinger and master equations. These files use ublas (from Boost) and the odeint library, which is currently in the Boost sandbox.</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/qubyte/QuantumBoosty/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/qubyte/QuantumBoosty/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/qubyte/QuantumBoosty" class="code">View Quantumboosty on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>QuantumBoosty</h1>
+
+<p>A few files to demonstrate some useful C++ features for integrating Schrödinger and master equations. These files use ublas (from <a href="www.boost.org">Boost</a>) and the <a href="www.odeint.com">odeint</a> library, which is currently in the Boost sandbox. Users may also find the <a href="https://www.dbtsai.com/blog/2008-11-25-matrix-exponential/">expm.hpp</a> implementation of the general matrix exponential helpful for time independent systems.</p>
+
+<h2>Background</h2>
+
+<p>One of the largest problems I came up against when working with C or Fortran was the lack of useful integrators. Obviously integrators are available, but I found myself jumping through hoops. In the case of C, I was using the GSL library, which both defines its own complex type (C has had its own since C99) and then fails to use it for the integrator routines, necessitating the doubling of the size of the system. That's not all that difficult in practise, but it's a an additional layer in the code that doesn't help readability. Worse, the routines rely on arcane drivers which means cracking out the manual, which is also unhelpful. In the case of Fortran, the VODE integrators are good, but require your program to be arranged in a particular way. Not so good for plug and play ODE solving.</p>
+
+<p>Recently I came across the C++ <a href="www.odeint.com">odeint</a> library. I was so impressed by its flexibility that I actually started using C++ (having had no prior experience) just for the convenience of it. I'm glad that I did this, because C++ has some other very useful features that make solving quantum mechanical systems simpler. Probably the most important feature that I use (perhaps abuse) is functors, a kind class with which instances can be used as functions.</p>
+
+<h2>To compile</h2>
+
+<p>First, make sure you have boost and odeint installed.</p>
+
+<p>Using gcc, I get good results with version 4.6+ using:</p>
+
+<pre><code>gcc -Ofast -fwhole-program -I/path/to/boost two_level.cpp -o two_level
+</code></pre>
+
+<p>If you're using an earlier version of gcc, replace <code>-Ofast</code> with <code>-O3 -ffast-math</code>. This repository is automatically tested with Travis CI, so if the badge at the top of this readme indicates that the project is passing, then you can also look inside the <a href=".travis.yml">.travis.yml</a> file for a set of steps to build on a debian derived Linux distribution.</p>
+
+<p>The file two_level encodes a simple two level with loss modelled with a Lindblad master equation. The output is four, tab delimited columns, with time in arbitrary units in the first column, the population probability of one level in the second, and the other level in the third, and the fourth column checks for normalisation.</p>
+
+<h2>Some explanation</h2>
+
+<p>The code may be unfamiliar to a C coder in places. In this section I attempt to explain some of the features that C++ allows. If you have experience with C++ in a scientific setting already, then you probably know more than I do and can skip it.</p>
+
+<h3>Functors</h3>
+
+<p>C++ allows <em>operator overloading</em>. Usually it's best to avoid this feature. It allows operators in the language to be extended to new classes. For example, you could define your own matrix class, and overload the <code>+</code> operator to allow matrix addition in the way you would expect. There's no need to do this though, since several libraries already implement matrices for C++, and I use ublas from Boost.</p>
+
+<p>It may surprise you to learn (it surprised me) that the brackets of a function can be overloaded too. This means that you can make an instance of a class behave like a function when it has brackets next to it. To restate, an instance of a class can behave like a function! These are known as functors or function objects. The cool thing is that some of the guts of the function can be determined upon instantiation. In C, the same can be achieved through function pointers, but functors allow you to encapsulate state.</p>
+
+<p>In the case of the code two_level.cpp, I've used a simple Hamiltonian representing a driven two level system. The Hamiltonian is instantiated with the level splitting, the frequency of the drive, and the amplitude of the drive:</p>
+
+<div class="highlight"><pre><span class="n">hamiltonian</span> <span class="n">H</span><span class="p">(</span><span class="n">Omega</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">Amp</span><span class="p">);</span>
+</pre></div>
+
+<p>Now we can use this instance to give us the Hamiltonian at any time:</p>
+
+<div class="highlight"><pre><span class="n">matrix_type</span> <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</pre></div>
+
+<p>Looking closer at the functor:</p>
+
+<div class="highlight"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">optype</span><span class="o">&gt;</span> 
+<span class="k">class</span> <span class="nc">hamiltonian</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">Omega</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">Amp</span><span class="p">;</span>
+    <span class="n">optype</span> <span class="n">H0</span><span class="p">;</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">hamiltonian</span> <span class="p">(</span><span class="kt">double</span> <span class="n">arg_Omega</span><span class="p">,</span> <span class="kt">double</span> <span class="n">arg_nu</span><span class="p">,</span> <span class="kt">double</span> <span class="n">arg_Amp</span><span class="p">)</span> <span class="o">:</span> <span class="n">Omega</span><span class="p">(</span><span class="n">arg_Omega</span><span class="p">),</span> <span class="n">nu</span><span class="p">(</span><span class="n">arg_nu</span><span class="p">),</span> <span class="n">Amp</span><span class="p">(</span><span class="n">arg_Amp</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">H0</span> <span class="o">=</span> <span class="n">Omega</span><span class="o">*</span><span class="n">sigma_z</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="n">optype</span> <span class="k">operator</span><span class="p">()</span> <span class="p">(</span><span class="kt">double</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">optype</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H0</span> <span class="o">+</span> <span class="n">Amp</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">nu</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">sigma_x</span><span class="o">*</span><span class="mf">0.5</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">H</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Hopefully much of this is understandable. A C++ class is like a C structure, but it can have internal functions called <em>member functions</em> or <em>methods</em>. The addition of these functions means that it makes sense for the class to keep some information (think book keeping) to itself, so both member functions and data can be declared as public (anyone can take a look) or private (for the class only). This is over simplifying, but either you know this or you can wiki it.</p>
+
+<p>One member function takes the name of the class. This is the function called when an instance of the class is produced. The prototype tells us that the instance will take three double precision floats as arguments, and these get assigned to private variables. Underscores here are used to differentiate between arguments and member data. The content of the function generates the static part of the Hamiltonian, which remains unchanged after the instance is produced. This is important! You can get lots of stuff like matrix multiplication out of the way like this.</p>
+
+<p>The other function in public is the overloaded function brackets. When you call an instance like a function, it's this that gets executed.</p>
+
+<p>The code in two_level.cpp goes a step further. If it's used to integrate a master equation, then a reference of an instance of the Hamiltonian functor is handed to the Liouville functor (functors in functors!).</p>
+
+<p><img src="http://i3.kym-cdn.com/photos/images/original/000/070/279/leostrutoriginal.jpg" alt="Leo"></p>
+
+<h3>Superoperators</h3>
+
+<p>A master equation on paper is a matrix valued differential equation. In computational terms, this is a real pain to deal with. On the face of it, it seems like even the time independent terms need to be formulated as functions. A trick can be used to avoid this, with the cost of increasing the size of your system. By vectorising the density matrix (stack the columns, with the left-most on top) all operators, whether they are on the left, right or both sides of the density matrix. There's a very handy page on wikipedia on <a href="http://en.wikipedia.org/wiki/Vectorization_(mathematics)">vectorisation</a> which shows how $n\times n$ operator matrices can be turned into $n^2\times n^2$ superoperator matrices always acting on the left.</p>
+
+<p>Once this is done, the situation is very similar to solving the Schrödinger equation by integration. The master equation can be summed up into a single matrix (which may be time dependent of course) acting on the left of a vector representing the density operator.</p>
+
+<p>To construct superoperators additional functions were needed. In two_level.cpp you'll find a function for performing the vectorisation of a matrix, functions to transform operators acting on the left or right into superoperators and some additional convenience functions for constructing terms in a master equation.</p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/qubyte" class="avatar"><img src="https://secure.gravatar.com/avatar/2b8729c02bc2fb886b32ed23cb7b0a31?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/qubyte">qubyte</a> maintains <a href="https://github.com/qubyte/QuantumBoosty">Quantumboosty</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/qubyte/QuantumBoosty/tarball/master" class="tar">tar</a><a href="https://github.com/qubyte/QuantumBoosty/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
