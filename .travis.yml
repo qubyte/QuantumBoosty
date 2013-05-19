@@ -5,11 +5,10 @@ compiler:
   - clang++
 before_install:
   - sudo apt-get install libboost-dev
-  - git clone --depth 1 git://github.com/headmyshoulder/odeint-v2.git#v2.2
-  - sudo cp -r odeint-v2/boost/numeric/odeint/ /usr/include/boost/numeric/odeint
-  - sudo cp odeint-v2/boost/numeric/odeint.hpp /usr/include/boost/numeric/odeint.hpp
-  - git clone --depth 1 git://github.com/qubyte/QuantumBoosty.git
-  - cd QuantumBoosty
+  - wget https://github.com/headmyshoulder/odeint-v2/archive/v2.2.tar.gz
+  - tar xvzf v2.2.tar.gz
+  - sudo cp -r odeint-v2-2.2/boost/numeric/odeint/ /usr/include/boost/numeric/odeint
+  - sudo cp odeint-v2-2.2/boost/numeric/odeint.hpp /usr/include/boost/numeric/odeint.hpp
 script:
   - $CXX two_level.cpp -o two_level
   - ./two_level
