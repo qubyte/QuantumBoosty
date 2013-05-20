@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 	// This lambda is like the matrix observer, but used for unitary evolution.
 	// Again, it is an example, and can be customised as long as the arguments
 	// remain the same. Note the range based for to iterate over the vector
-    // elements.
+	// elements.
 	auto vector_observer = [] (const state_type psit, double t) {
 		cout << t;
 
@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
 		stepper,        // Stepper with error checking.
 		liouville,      // The master equation.
 		rhov,           // Initial state.
-		0.0,			// Start time.
+		0.0,            // Start time.
 		tend,           // Stop time.
 		stepTime        // Step time.
 		matrix_observer // Output at each step.
